@@ -14,7 +14,6 @@
   --bg3:#13131f;
   --gold:#c9a84c;
   --gold2:#e8c97a;
-  --blue:#2563eb;
   --text:#dde3f0;
   --muted:#6b7694;
   --border:rgba(201,168,76,0.15);
@@ -32,23 +31,12 @@ body{
   overflow-x:hidden;
 }
 
-/* Noise overlay */
-body::after{
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events:none;
-  z-index:999;
-  opacity:0.4;
-}
-
-/* ── NAV ── */
+/* NAV */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:200;
   display:flex;justify-content:space-between;align-items:center;
   padding:1.2rem 3rem;
-  background:rgba(5,5,8,0.8);
+  background:rgba(5,5,8,0.85);
   backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
 }
@@ -66,7 +54,6 @@ nav{
 }
 .nav-links a:hover{color:var(--gold)}
 
-/* CV Button */
 .btn-cv{
   display:inline-flex;align-items:center;gap:0.5rem;
   padding:0.55rem 1.4rem;
@@ -82,9 +69,9 @@ nav{
   transition:background 0.2s,color 0.2s;
 }
 .btn-cv:hover{background:var(--gold);color:#050508}
-.btn-cv svg{width:14px;height:14px}
+.btn-cv svg{width:14px;height:14px;flex-shrink:0}
 
-/* ── HERO ── */
+/* HERO */
 .hero{
   position:relative;
   min-height:100vh;
@@ -95,17 +82,14 @@ nav{
   overflow:hidden;
 }
 
-/* Diagonal line accent */
-.hero::before{
-  content:'';
+.hero-line{
   position:absolute;
-  top:-10%;right:5%;
+  top:-10%;right:8%;
   width:1px;height:130%;
   background:linear-gradient(to bottom,transparent,var(--gold),transparent);
-  opacity:0.3;
+  opacity:0.25;
   transform:rotate(12deg);
 }
-.hero::after{display:none}
 
 .hero-bg-text{
   position:absolute;
@@ -169,14 +153,13 @@ nav{
   text-transform:uppercase;
   display:flex;align-items:center;gap:0.6rem;
 }
-.meta-item::before{
-  content:'';
-  display:inline-block;width:6px;height:6px;
+.meta-dot{
+  width:6px;height:6px;
   background:var(--gold);border-radius:50%;
   flex-shrink:0;
 }
 
-/* ── ALTERNANCE ── */
+/* ALTERNANCE */
 .section-alt{
   position:relative;z-index:1;
   padding:7rem 3rem;
@@ -214,12 +197,11 @@ nav{
   line-height:1.9;
   margin-bottom:1rem;
 }
-
 .alt-intro strong{color:var(--text);font-weight:500}
 
 .tasks-list{
   display:flex;flex-direction:column;gap:0.75rem;
-  margin-top:2rem;
+  margin-top:0;
 }
 
 .task-item{
@@ -228,14 +210,19 @@ nav{
   background:var(--card);
   border:1px solid var(--border);
 }
-.task-icon{
-  font-size:1.1rem;
-  flex-shrink:0;margin-top:2px;
+
+.task-icon-bar{
+  width:3px;height:100%;
+  background:var(--gold);
+  flex-shrink:0;
+  min-height:40px;
+  opacity:0.5;
 }
+
 .task-text{font-size:0.85rem;color:var(--muted);line-height:1.6}
 .task-text strong{color:var(--text);font-weight:500;display:block;margin-bottom:2px}
 
-/* ── REALISATIONS ── */
+/* REALISATIONS */
 .section-real{
   position:relative;z-index:1;
   padding:7rem 3rem;
@@ -253,29 +240,56 @@ nav{
 
 .real-card{
   background:var(--bg);
-  padding:2.5rem;
+  padding:0;
   position:relative;
   overflow:hidden;
   transition:background 0.3s;
+  display:flex;
+  flex-direction:column;
 }
 .real-card:hover{background:var(--bg3)}
 
+.real-card-img-wrap{
+  width:100%;
+  height:200px;
+  overflow:hidden;
+  background:var(--bg3);
+  position:relative;
+}
+
 .real-card-img{
   width:100%;
-  height:180px;
+  height:100%;
   object-fit:cover;
-  margin-bottom:1.5rem;
-  filter:grayscale(30%) brightness(0.8);
-  transition:filter 0.3s;
+  filter:grayscale(20%) brightness(0.75);
+  transition:filter 0.4s,transform 0.4s;
+  display:block;
 }
-.real-card:hover .real-card-img{filter:grayscale(0%) brightness(0.9)}
+.real-card:hover .real-card-img{
+  filter:grayscale(0%) brightness(0.9);
+  transform:scale(1.04);
+}
+
+/* Fallback si image non chargée */
+.img-fallback{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg3);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1rem;
+  letter-spacing:0.2em;
+  color:rgba(201,168,76,0.3);
+}
+
+.real-card-body{padding:2rem}
 
 .real-number{
-  position:absolute;top:1.5rem;right:1.5rem;
+  position:absolute;top:1rem;right:1rem;
   font-family:'Bebas Neue',sans-serif;
-  font-size:3rem;
-  color:rgba(201,168,76,0.08);
+  font-size:2.5rem;
+  color:rgba(201,168,76,0.1);
   line-height:1;
+  pointer-events:none;
 }
 
 .real-type{
@@ -317,7 +331,7 @@ nav{
   color:rgba(201,168,76,0.7);
 }
 
-/* ── COMPETENCES ── */
+/* COMPETENCES */
 .section-skills{
   position:relative;z-index:1;
   padding:7rem 3rem;
@@ -358,7 +372,7 @@ nav{
 }
 .dot.on{background:var(--gold);border-color:var(--gold)}
 
-/* ── FOOTER ── */
+/* FOOTER */
 footer{
   position:relative;z-index:1;
   padding:3rem;
@@ -373,12 +387,11 @@ footer{
 }
 footer p{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em}
 
-/* ── ANIMATIONS ── */
+/* ANIMATIONS */
 @keyframes fadeUp{
   from{opacity:0;transform:translateY(24px)}
   to{opacity:1;transform:translateY(0)}
 }
-
 .reveal{
   opacity:0;
   transform:translateY(30px);
@@ -386,7 +399,7 @@ footer p{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em}
 }
 .reveal.visible{opacity:1;transform:none}
 
-/* ── RESPONSIVE ── */
+/* RESPONSIVE */
 @media(max-width:900px){
   nav{padding:1rem 1.5rem}
   .nav-links{display:none}
@@ -408,22 +421,23 @@ footer p{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em}
   <div class="nav-logo">RH</div>
   <ul class="nav-links">
     <li><a href="#alternance">Alternance</a></li>
-    <li><a href="#realisations">Réalisations</a></li>
-    <li><a href="#competences">Compétences</a></li>
+    <li><a href="#realisations">Realisations</a></li>
+    <li><a href="#competences">Competences</a></li>
   </ul>
   <a class="btn-cv" href="HARIECHE_Rayan__1_.pdf" download>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-    Télécharger mon CV
+    Telecharger mon CV
   </a>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
+  <div class="hero-line"></div>
   <div class="hero-bg-text">SISR</div>
 
   <div class="hero-eyebrow">
     <span></span>
-    Portfolio BTS SIO — Option SISR — 2024/2026
+    Portfolio BTS SIO — Option SISR — 2024 / 2026
   </div>
 
   <h1>
@@ -433,13 +447,13 @@ footer p{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em}
 
   <div class="hero-sub">
     <p class="hero-desc">
-      Technicien Support Informatique N2 en alternance à l'<strong style="color:var(--text);font-weight:500">Institut du Monde Arabe</strong> — Paris. Passionné par l'administration systèmes, les réseaux et la gestion d'infrastructures IT.
+      Technicien Support Informatique N2 en alternance a l'<strong style="color:var(--text);font-weight:500">Institut du Monde Arabe</strong> — Paris. Passionne par l'administration systemes, les reseaux et la gestion d'infrastructures IT.
     </p>
     <div class="hero-meta">
-      <div class="meta-item">BTS SIO — SISR</div>
-      <div class="meta-item">CFA Insta — Paris (75)</div>
-      <div class="meta-item">Île-de-France</div>
-      <div class="meta-item">rayan.harieche@gmail.com</div>
+      <div class="meta-item"><span class="meta-dot"></span>BTS SIO — SISR</div>
+      <div class="meta-item"><span class="meta-dot"></span>CFA Insta — Paris (75)</div>
+      <div class="meta-item"><span class="meta-dot"></span>Ile-de-France</div>
+      <div class="meta-item"><span class="meta-dot"></span>rayan.harieche@gmail.com</div>
     </div>
   </div>
 </section>
@@ -447,53 +461,53 @@ footer p{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em}
 <!-- ALTERNANCE -->
 <section class="section-alt" id="alternance">
   <div style="max-width:1400px;margin:0 auto">
-    <div class="label reveal">// Expérience professionnelle</div>
+    <div class="label reveal">// Experience professionnelle</div>
     <h2 class="section-title reveal">Mon alternance</h2>
 
     <div class="alt-grid">
       <div class="alt-intro reveal">
         <p>
-          Depuis <strong>janvier 2025</strong>, j'effectue mon alternance au sein du <strong>service informatique de l'Institut du Monde Arabe</strong>, institution culturelle de renom située à Paris (75). Cette expérience me permet d'évoluer dans un environnement professionnel exigeant, au cœur d'un parc informatique diversifié.
+          Depuis <strong>janvier 2025</strong>, j'effectue mon alternance au sein du <strong>service informatique de l'Institut du Monde Arabe</strong>, institution culturelle de renom situee a Paris (75). Cette experience me permet d'evoluer dans un environnement professionnel exigeant, au coeur d'un parc informatique diversifie.
         </p>
         <p>
-          Mon rôle principal est d'assurer le <strong>support utilisateurs de niveau 2</strong>, en traitant les incidents et demandes escaladés par le niveau 1. Je suis également amené à intervenir sur des missions d'<strong>administration réseau</strong>, notamment à travers la gestion du firewall <strong>Sophos</strong>, qui assure la sécurité de l'infrastructure de l'établissement.
+          Mon role principal est d'assurer le <strong>support utilisateurs de niveau 2</strong>, en traitant les incidents et demandes escalades par le niveau 1. Je suis egalement amene a intervenir sur des missions d'<strong>administration reseau</strong>, notamment a travers la gestion du firewall <strong>Sophos</strong>, qui assure la securite de l'infrastructure de l'etablissement.
         </p>
         <p>
-          Cette alternance m'a permis de confronter mes connaissances théoriques à des situations réelles, de développer mon autonomie et de renforcer mes compétences techniques dans un contexte professionnel concret.
+          Cette alternance m'a permis de confronter mes connaissances theoriques a des situations reelles, de developper mon autonomie et de renforcer mes competences techniques dans un contexte professionnel concret.
         </p>
       </div>
 
       <div class="tasks-list reveal">
         <div class="task-item">
-          <div class="task-icon">🖥️</div>
+          <div class="task-icon-bar"></div>
           <div class="task-text">
             <strong>Support utilisateurs N2</strong>
-            Traitement des incidents escaladés, diagnostic et résolution des pannes matérielles et logicielles, accompagnement des utilisateurs finaux dans l'environnement Windows.
+            Traitement des incidents escalades, diagnostic et resolution des pannes materielles et logicielles, accompagnement des utilisateurs finaux dans l'environnement Windows.
           </div>
         </div>
         <div class="task-item">
-          <div class="task-icon">🔥</div>
+          <div class="task-icon-bar"></div>
           <div class="task-text">
             <strong>Administration Firewall Sophos</strong>
-            Gestion et supervision du pare-feu Sophos, consultation des règles de filtrage, analyse des logs réseau et participation à la politique de sécurité de l'infrastructure.
+            Gestion et supervision du pare-feu Sophos, consultation des regles de filtrage, analyse des logs reseau et participation a la politique de securite de l'infrastructure.
           </div>
         </div>
         <div class="task-item">
-          <div class="task-icon">📋</div>
+          <div class="task-icon-bar"></div>
           <div class="task-text">
             <strong>Gestion des tickets GLPI</strong>
-            Traitement et suivi des demandes via GLPI, catégorisation des incidents, mise à jour du parc informatique et documentation des interventions.
+            Traitement et suivi des demandes via GLPI, categorisation des incidents, mise a jour du parc informatique et documentation des interventions.
           </div>
         </div>
         <div class="task-item">
-          <div class="task-icon">🏢</div>
+          <div class="task-icon-bar"></div>
           <div class="task-text">
             <strong>Active Directory</strong>
-            Gestion des utilisateurs, des groupes et des droits d'accès dans l'environnement Active Directory de l'établissement.
+            Gestion des utilisateurs, des groupes et des droits d'acces dans l'environnement Active Directory de l'etablissement.
           </div>
         </div>
         <div class="task-item">
-          <div class="task-icon">☁️</div>
+          <div class="task-icon-bar"></div>
           <div class="task-text">
             <strong>Microsoft Azure</strong>
             Utilisation de l'environnement cloud Azure pour la gestion et la supervision de certaines ressources de l'infrastructure.
@@ -506,138 +520,174 @@ footer p{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em}
 
 <!-- REALISATIONS -->
 <section class="section-real" id="realisations">
-  <div class="label reveal">// Projets & réalisations</div>
-  <h2 class="section-title reveal">Mes réalisations</h2>
+  <div class="label reveal">// Projets et realisations</div>
+  <h2 class="section-title reveal">Mes realisations</h2>
 
   <div class="real-grid reveal">
 
     <!-- 1 - PXE -->
     <div class="real-card">
-      <div class="real-number">01</div>
-      <img class="real-card-img"
-        src="https://www.manageengine.com/products/os-deployer/images/pxe-boot-server.png"
-        alt="Serveur PXE"
-        onerror="this.style.display='none'">
-      <div class="real-type">Alternance — IMA</div>
-      <div class="real-title">Serveur PXE</div>
-      <p class="real-desc">
-        Mise en place d'un serveur PXE (Preboot eXecution Environment) permettant d'automatiser le déploiement des systèmes d'exploitation sur les postes de travail de l'Institut du Monde Arabe. Ce serveur permet d'amorcer les machines via le réseau sans support physique, d'installer automatiquement Windows selon un profil prédéfini et de réduire considérablement le temps de déploiement lors des renouvellements de parc ou des réinstallations. Une solution clé pour optimiser la gestion du parc informatique de l'établissement.
-      </p>
-      <div class="real-tags">
-        <span class="real-tag">PXE</span>
-        <span class="real-tag">DHCP</span>
-        <span class="real-tag">TFTP</span>
-        <span class="real-tag">WDS</span>
-        <span class="real-tag">Windows</span>
-        <span class="real-tag">Déploiement</span>
+      <div class="real-card-img-wrap">
+        <div class="img-fallback">SERVEUR PXE</div>
+        <img class="real-card-img"
+          src="https://www.manageengine.com/products/os-deployer/images/what-is-pxe-boot-server.png"
+          alt="Serveur PXE"
+          onload="this.previousElementSibling.style.display='none'"
+          onerror="this.style.display='none'">
+      </div>
+      <div class="real-card-body">
+        <div class="real-number">01</div>
+        <div class="real-type">Alternance — IMA</div>
+        <div class="real-title">Serveur PXE</div>
+        <p class="real-desc">
+          Mise en place d'un serveur PXE permettant d'automatiser le deploiement des systemes d'exploitation sur les postes de travail de l'Institut du Monde Arabe. Ce serveur permet d'amorcer les machines via le reseau sans support physique, d'installer automatiquement Windows selon un profil predefini et de reduire considerablement le temps de deploiement lors des renouvellements de parc ou des reinitialisations.
+        </p>
+        <div class="real-tags">
+          <span class="real-tag">PXE</span>
+          <span class="real-tag">DHCP</span>
+          <span class="real-tag">TFTP</span>
+          <span class="real-tag">WDS</span>
+          <span class="real-tag">Windows</span>
+          <span class="real-tag">Deploiement</span>
+        </div>
       </div>
     </div>
 
     <!-- 2 - Salle stock -->
     <div class="real-card">
-      <div class="real-number">02</div>
-      <img class="real-card-img"
-        src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=70"
-        alt="Modélisation salle stock"
-        onerror="this.style.display='none'">
-      <div class="real-type">Alternance — IMA</div>
-      <div class="real-title">Modélisation salle stock</div>
-      <p class="real-desc">
-        Réalisation d'une modélisation complète de la salle de stock informatique de l'Institut du Monde Arabe. Ce travail a consisté à recenser, inventorier et cartographier l'ensemble du matériel stocké (équipements réseau, postes de travail, périphériques, câblage). La modélisation a permis de créer une représentation claire et structurée de l'espace, facilitant la gestion des stocks, la localisation rapide du matériel et l'optimisation de l'organisation physique de la salle.
-      </p>
-      <div class="real-tags">
-        <span class="real-tag">Inventaire</span>
-        <span class="real-tag">Cartographie</span>
-        <span class="real-tag">Gestion de parc</span>
-        <span class="real-tag">Organisation</span>
-        <span class="real-tag">GLPI</span>
+      <div class="real-card-img-wrap">
+        <div class="img-fallback">SALLE STOCK</div>
+        <img class="real-card-img"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Server_rack_assembly.jpg/1280px-Server_rack_assembly.jpg"
+          alt="Salle de stock informatique"
+          onload="this.previousElementSibling.style.display='none'"
+          onerror="this.style.display='none'">
+      </div>
+      <div class="real-card-body">
+        <div class="real-number">02</div>
+        <div class="real-type">Alternance — IMA</div>
+        <div class="real-title">Modelisation salle stock</div>
+        <p class="real-desc">
+          Realisation d'une modelisation complete de la salle de stock informatique de l'Institut du Monde Arabe. Ce travail a consiste a recenser, inventorier et cartographier l'ensemble du materiel stocke : equipements reseau, postes de travail, peripheriques et cablage. La modelisation a permis de creer une representation claire et structuree facilitant la gestion des stocks et la localisation rapide du materiel.
+        </p>
+        <div class="real-tags">
+          <span class="real-tag">Inventaire</span>
+          <span class="real-tag">Cartographie</span>
+          <span class="real-tag">Gestion de parc</span>
+          <span class="real-tag">Organisation</span>
+          <span class="real-tag">GLPI</span>
+        </div>
       </div>
     </div>
 
-    <!-- 3 - GLPI catégories -->
+    <!-- 3 - GLPI categories -->
     <div class="real-card">
-      <div class="real-number">03</div>
-      <img class="real-card-img"
-        src="https://www.glpi-project.org/wp-content/uploads/2019/08/screenshots-helpdesk.png"
-        alt="GLPI catégories tickets"
-        onerror="this.style.display='none'">
-      <div class="real-type">Alternance — IMA</div>
-      <div class="real-title">Catégories tickets GLPI</div>
-      <p class="real-desc">
-        Participation à la création et la structuration des catégories de tickets dans la nouvelle instance GLPI de l'Institut du Monde Arabe. Cette mission a impliqué l'analyse des types d'incidents récurrents, la définition d'une arborescence de catégories cohérente (matériel, logiciel, réseau, accès, messagerie…) et la configuration de l'outil pour optimiser le routage automatique des tickets vers les bons techniciens. Un travail essentiel pour améliorer l'efficacité du support et la qualité du suivi des incidents.
-      </p>
-      <div class="real-tags">
-        <span class="real-tag">GLPI</span>
-        <span class="real-tag">Helpdesk</span>
-        <span class="real-tag">ITSM</span>
-        <span class="real-tag">Configuration</span>
-        <span class="real-tag">Support N2</span>
+      <div class="real-card-img-wrap">
+        <div class="img-fallback">GLPI TICKETS</div>
+        <img class="real-card-img"
+          src="https://www.glpi-project.org/wp-content/uploads/2019/08/screenshots-helpdesk.png"
+          alt="GLPI categories tickets"
+          onload="this.previousElementSibling.style.display='none'"
+          onerror="this.style.display='none'">
+      </div>
+      <div class="real-card-body">
+        <div class="real-number">03</div>
+        <div class="real-type">Alternance — IMA</div>
+        <div class="real-title">Categories tickets GLPI</div>
+        <p class="real-desc">
+          Participation a la creation et la structuration des categories de tickets dans la nouvelle instance GLPI de l'Institut du Monde Arabe. Cette mission a implique l'analyse des types d'incidents recurrents, la definition d'une arborescence de categories coherente (materiel, logiciel, reseau, acces, messagerie) et la configuration de l'outil pour optimiser le routage des tickets vers les bons techniciens.
+        </p>
+        <div class="real-tags">
+          <span class="real-tag">GLPI</span>
+          <span class="real-tag">Helpdesk</span>
+          <span class="real-tag">ITSM</span>
+          <span class="real-tag">Configuration</span>
+          <span class="real-tag">Support N2</span>
+        </div>
       </div>
     </div>
 
     <!-- 4 - AD -->
     <div class="real-card">
-      <div class="real-number">04</div>
-      <img class="real-card-img"
-        src="https://eicqn.com/wp-content/uploads/2023/05/Setting-up-a-Domain-Controller.png"
-        alt="Active Directory"
-        onerror="this.style.display='none'">
-      <div class="real-type">Formation — BTS SIO</div>
-      <div class="real-title">Serveur Active Directory</div>
-      <p class="real-desc">
-        Déploiement d'un contrôleur de domaine principal (DC1) sous Windows Server 2022 dans le cadre du projet BTS pour la société fictive SafeTech. Configuration complète de l'Active Directory : création d'unités d'organisation (UO Visiteurs & Stagiaires), mise en place de stratégies de groupe (GPO) pour contrôler les accès aux ressources matérielles et logicielles. Déploiement d'un contrôleur de domaine secondaire (DC2) pour assurer la haute disponibilité. Scripting PowerShell pour l'automatisation de la gestion des utilisateurs.
-      </p>
-      <div class="real-tags">
-        <span class="real-tag">Windows Server 2022</span>
-        <span class="real-tag">Active Directory</span>
-        <span class="real-tag">GPO</span>
-        <span class="real-tag">DNS</span>
-        <span class="real-tag">DHCP</span>
-        <span class="real-tag">PowerShell</span>
+      <div class="real-card-img-wrap">
+        <div class="img-fallback">ACTIVE DIRECTORY</div>
+        <img class="real-card-img"
+          src="https://eicqn.com/wp-content/uploads/2023/05/Setting-up-a-Domain-Controller.png"
+          alt="Active Directory Windows Server"
+          onload="this.previousElementSibling.style.display='none'"
+          onerror="this.style.display='none'">
+      </div>
+      <div class="real-card-body">
+        <div class="real-number">04</div>
+        <div class="real-type">Formation — BTS SIO</div>
+        <div class="real-title">Serveur Active Directory</div>
+        <p class="real-desc">
+          Deploiement d'un controleur de domaine principal sous Windows Server 2022 dans le cadre du projet BTS pour la societe fictive SafeTech. Configuration complete de l'Active Directory : creation d'unites d'organisation (UO Visiteurs et Stagiaires), mise en place de strategies de groupe (GPO) pour controler les acces aux ressources. Deploiement d'un controleur secondaire (DC2) pour assurer la haute disponibilite et la continuite de service.
+        </p>
+        <div class="real-tags">
+          <span class="real-tag">Windows Server 2022</span>
+          <span class="real-tag">Active Directory</span>
+          <span class="real-tag">GPO</span>
+          <span class="real-tag">DNS</span>
+          <span class="real-tag">DHCP</span>
+          <span class="real-tag">PowerShell</span>
+        </div>
       </div>
     </div>
 
     <!-- 5 - GLPI BTS -->
     <div class="real-card">
-      <div class="real-number">05</div>
-      <img class="real-card-img"
-        src="https://www.glpi-project.org/wp-content/uploads/2019/08/screenshots-helpdesk.png"
-        alt="Serveur GLPI"
-        onerror="this.style.display='none'">
-      <div class="real-type">Formation — BTS SIO</div>
-      <div class="real-title">Serveur GLPI</div>
-      <p class="real-desc">
-        Installation et configuration d'un serveur GLPI 10.0.17 sur Ubuntu 24.04 LTS dans le cadre du projet SafeTech. Mise en place d'une stack LAMP complète (Apache2, MariaDB, PHP) et configuration du virtualhost Apache. Intégration avec le serveur de messagerie Postfix pour l'envoi automatique de notifications aux techniciens et utilisateurs lors de la création, modification ou résolution des tickets. Création de scénarios de gestion des incidents sur trois plateformes distinctes.
-      </p>
-      <div class="real-tags">
-        <span class="real-tag">GLPI 10.0.17</span>
-        <span class="real-tag">Ubuntu 24.04</span>
-        <span class="real-tag">Apache2</span>
-        <span class="real-tag">MariaDB</span>
-        <span class="real-tag">Postfix</span>
-        <span class="real-tag">PHP</span>
+      <div class="real-card-img-wrap">
+        <div class="img-fallback">SERVEUR GLPI</div>
+        <img class="real-card-img"
+          src="https://geek-rewind.com/wp-content/uploads/2023/02/Install-GLPI-on-Ubuntu-22.04.png"
+          alt="Serveur GLPI Ubuntu"
+          onload="this.previousElementSibling.style.display='none'"
+          onerror="this.style.display='none'">
+      </div>
+      <div class="real-card-body">
+        <div class="real-number">05</div>
+        <div class="real-type">Formation — BTS SIO</div>
+        <div class="real-title">Serveur GLPI</div>
+        <p class="real-desc">
+          Installation et configuration d'un serveur GLPI 10.0.17 sur Ubuntu 24.04 LTS dans le cadre du projet SafeTech. Mise en place d'une stack LAMP complete (Apache2, MariaDB, PHP) et configuration du virtualhost Apache. Integration avec le serveur de messagerie Postfix pour l'envoi automatique de notifications lors de la creation, modification ou resolution des tickets. Creation de scenarios de gestion des incidents sur trois plateformes.
+        </p>
+        <div class="real-tags">
+          <span class="real-tag">GLPI 10.0.17</span>
+          <span class="real-tag">Ubuntu 24.04</span>
+          <span class="real-tag">Apache2</span>
+          <span class="real-tag">MariaDB</span>
+          <span class="real-tag">Postfix</span>
+          <span class="real-tag">PHP</span>
+        </div>
       </div>
     </div>
 
     <!-- 6 - Nagios -->
     <div class="real-card">
-      <div class="real-number">06</div>
-      <img class="real-card-img"
-        src="https://assets.nagios.com/downloads/nagiosxi/docs/Monitoring-Windows-With-Nagios-XI/xi5-monitoring-windows-services.png"
-        alt="Nagios supervision"
-        onerror="this.style.display='none'">
-      <div class="real-type">Formation — BTS SIO</div>
-      <div class="real-title">Serveur Nagios</div>
-      <p class="real-desc">
-        Installation depuis les sources et configuration de Nagios Core 4.5.5 sur Ubuntu 24.04 LTS pour la supervision de l'infrastructure SafeTech. Compilation et installation des plugins Nagios, configuration de l'interface web sécurisée via Apache avec authentification. Mise en place de la surveillance de l'occupation disque et du taux de charge processeur. Configuration des alertes mail via Postfix pour notifier automatiquement l'administrateur réseau en cas de défaillance détectée.
-      </p>
-      <div class="real-tags">
-        <span class="real-tag">Nagios Core 4.5.5</span>
-        <span class="real-tag">Ubuntu 24.04</span>
-        <span class="real-tag">Supervision</span>
-        <span class="real-tag">Alertes mail</span>
-        <span class="real-tag">Apache2</span>
-        <span class="real-tag">Plugins</span>
+      <div class="real-card-img-wrap">
+        <div class="img-fallback">NAGIOS</div>
+        <img class="real-card-img"
+          src="https://assets.nagios.com/downloads/nagiosxi/docs/Monitoring-Windows-With-Nagios-XI/xi5-monitoring-windows-services.png"
+          alt="Nagios supervision"
+          onload="this.previousElementSibling.style.display='none'"
+          onerror="this.style.display='none'">
+      </div>
+      <div class="real-card-body">
+        <div class="real-number">06</div>
+        <div class="real-type">Formation — BTS SIO</div>
+        <div class="real-title">Serveur Nagios</div>
+        <p class="real-desc">
+          Installation depuis les sources et configuration de Nagios Core 4.5.5 sur Ubuntu 24.04 LTS pour la supervision de l'infrastructure SafeTech. Compilation et installation des plugins Nagios, configuration de l'interface web securisee via Apache avec authentification. Mise en place de la surveillance de l'occupation disque et du taux de charge processeur. Configuration des alertes mail via Postfix pour notifier l'administrateur en cas de defaillance.
+        </p>
+        <div class="real-tags">
+          <span class="real-tag">Nagios Core 4.5.5</span>
+          <span class="real-tag">Ubuntu 24.04</span>
+          <span class="real-tag">Supervision</span>
+          <span class="real-tag">Alertes mail</span>
+          <span class="real-tag">Apache2</span>
+          <span class="real-tag">Plugins</span>
+        </div>
       </div>
     </div>
 
@@ -648,12 +698,11 @@ footer p{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em}
 <section class="section-skills" id="competences">
   <div class="skills-inner">
     <div class="label reveal">// Stack technique</div>
-    <h2 class="section-title reveal">Compétences</h2>
+    <h2 class="section-title reveal">Competences</h2>
 
     <div class="skills-cols reveal">
-
       <div>
-        <div class="skill-col-title">Systèmes</div>
+        <div class="skill-col-title">Systemes</div>
         <div class="skill-row"><span class="skill-name">Windows Server 2022</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div></div>
         <div class="skill-row"><span class="skill-name">Ubuntu / Debian Linux</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div></div>
         <div class="skill-row"><span class="skill-name">Active Directory / GPO</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div></div>
@@ -662,23 +711,22 @@ footer p{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em}
       </div>
 
       <div>
-        <div class="skill-col-title">Réseaux & Sécurité</div>
+        <div class="skill-col-title">Reseaux et Securite</div>
         <div class="skill-row"><span class="skill-name">Firewall Sophos</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div></div>
         <div class="skill-row"><span class="skill-name">TCP/IP, DNS, DHCP</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div></div>
         <div class="skill-row"><span class="skill-name">VLAN / Routage</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div></div>
         <div class="skill-row"><span class="skill-name">Nagios (supervision)</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div></div>
-        <div class="skill-row"><span class="skill-name">PXE / Déploiement</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div></div>
+        <div class="skill-row"><span class="skill-name">PXE / Deploiement</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div></div>
       </div>
 
       <div>
-        <div class="skill-col-title">Outils & Services</div>
+        <div class="skill-col-title">Outils et Services</div>
         <div class="skill-row"><span class="skill-name">GLPI</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div></div>
         <div class="skill-row"><span class="skill-name">Postfix / Roundcube</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div></div>
         <div class="skill-row"><span class="skill-name">Apache / MariaDB</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div></div>
         <div class="skill-row"><span class="skill-name">PowerShell / Bash</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div></div>
         <div class="skill-row"><span class="skill-name">Support N2</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div></div>
       </div>
-
     </div>
   </div>
 </section>
@@ -704,7 +752,7 @@ const obs = new IntersectionObserver(entries => {
       obs.unobserve(e.target);
     }
   });
-},{threshold:0.12});
+},{threshold:0.1});
 reveals.forEach(r => obs.observe(r));
 </script>
 </body>
